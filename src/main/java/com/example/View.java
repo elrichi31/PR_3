@@ -1,8 +1,6 @@
 package com.example;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -33,7 +31,6 @@ public class View {
         tableView.setEditable(false);
     
         TableColumn<Person, Integer> idColumn = new TableColumn<Person, Integer>("ID");
-
         //idColumn.setCellValueFactory(cellData );
     
         TableColumn<Person, String> firstNameColumn = new TableColumn<Person, String>("First Name");
@@ -44,6 +41,10 @@ public class View {
     
         TableColumn<Person, String> emailColumn = new TableColumn<>("Email");
         //emailColumn.setCellValueFactory(cellData -> cellData.getValue().emailProperty());
+
+        idColumn.setMinWidth(20);
+        idColumn.setCellValueFactory(
+                new PropertyValueFactory<Person, Integer>("id"));
         
         firstNameColumn.setMinWidth(100);
         firstNameColumn.setCellValueFactory(
@@ -53,7 +54,7 @@ public class View {
         lastNameColumn.setCellValueFactory(
                 new PropertyValueFactory<Person, String>("lastName"));
  
-        emailColumn.setMinWidth(200);
+        emailColumn.setMinWidth(250);
         emailColumn.setCellValueFactory(
                 new PropertyValueFactory<Person, String>("email"));
 
@@ -62,7 +63,6 @@ public class View {
 
         Label idLabel = new Label("ID:");
         idField = new TextField();
-        //idField.setEditable(false);
 
         Label firstNameLabel = new Label("First Name:");
         firstNameField = new TextField();
@@ -75,23 +75,30 @@ public class View {
 
 
         Button addButton = new Button("Add");
-        addButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e){
-                ObservableList <Person> newData = controller.addPerson(firstNameField, lastNameField, emailField, data);
-                tableView.setItems(newData);
-            }    
+        addButton.setOnAction(e -> {
+            ObservableList<Person> newData = controller.addPerson(idField ,firstNameField, lastNameField, emailField, data);
+            tableView.setItems(newData);
         });
-        //addButton.setOnAction(e -> addPerson());
 
         Button updateButton = new Button("Update");
-        //updateButton.setOnAction(e -> updatePerson());
+        updateButton.setOnAction(e -> {
+            ObservableList<Person> newData =  controller.updatePerson(idField, firstNameField, lastNameField, emailField, data);
+            tableView.setItems(newData);
+            tableView.refresh();
+        });
 
         Button deleteButton = new Button("Delete");
-        //deleteButton.setOnAction(e ->
+        
 
         Button clearButton = new Button("Clear");
-        //clearButton.setOnAction(e -> clearFields());
+            clearButton.setOnAction(e -> {
+            idField.clear();
+            firstNameField.clear();
+            lastNameField.clear();
+            emailField.clear();
+        });
+
+
         // Crear el panel de entrada de datos
         GridPane inputGridPane = new GridPane();
         inputGridPane.setHgap(10);
@@ -123,30 +130,4 @@ public class View {
         mainPane.setRight(buttonGridPane);
         return mainPane;
     }
-
-
-
-        // Crear los campos de texto
-    // Label idLabel = new Label("ID:");
-    // idField = new TextField();
-    // idField.setEditable(false);
-
-    // Label firstNameLabel = new Label("First Name:");
-    // firstNameField = new TextField();
-
-    // Label lastNameLabel = new Label("Last Name:");
-    // lastNameField = new TextField();
-
-    // Label emailLabel = new Label("Email:");
-    // emailField = new TextField();
-
-    //     // Crear los botones
-    // Button addButton = new Button("Add");
-    // //addButton.setOnAction(e -> addPerson());
-
-    // Button updateButton = new Button("Update");
-    // //updateButton.setOnAction(e -> updatePerson());
-
-    // Button deleteButton = new Button("Delete");
-    // //deleteButton.setOnAction(e ->
 }

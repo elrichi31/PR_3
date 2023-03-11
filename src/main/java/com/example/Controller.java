@@ -1,6 +1,9 @@
 package com.example;
 
+import java.util.List;
+
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.TextField;
@@ -28,11 +31,10 @@ public class Controller {
         return people;
     }
     
-    public ObservableList addPerson(TextField firstNameField, TextField lastNameField, TextField emailField, 
+    public ObservableList<Person> addPerson(TextField id, TextField firstNameField, TextField lastNameField, TextField emailField, 
     ObservableList<Person> data) {
-        data.add(new Person(1, firstNameField.getText(), lastNameField.getText(), emailField.getText()));
+        data.add(new Person(Integer.parseInt(id.getText()), firstNameField.getText(), lastNameField.getText(), emailField.getText()));
         return data;
-        
         // Insertar un nuevo registro en la tabla
     //     try {
     //         int id = Integer.parseInt(idField.getText());
@@ -52,5 +54,25 @@ public class Controller {
     //         ex.printStackTrace();
     //     }
     // }
+    }
+
+    public ObservableList<Person> updatePerson(TextField id, TextField firstNameField, TextField lastNameField, TextField emailField, 
+    ObservableList<Person> data){
+        data.forEach(e -> {
+            if(e.getId() == Integer.parseInt(id.getText())){
+                System.out.println(e.getFirstName());
+                e.setFirstName(firstNameField.getText());
+                e.setLastName(lastNameField.getText());
+                e.setEmail(emailField.getText());
+                System.out.println(e.getFirstName() + " " + e.getLastName());
+            }
+
+        });
+        return data;
+    }
+
+    public ObservableList<Person> deletePerson(TextField id, TextField firstNameField, TextField lastNameField, TextField emailField, 
+    ObservableList<Person> data){
+        return data;
     }
 }
