@@ -1,46 +1,38 @@
 package com.example;
 
 public class Person {
-    private int id;
-    private String firstName;
-    private String lastName;
-    private String email;
-    public Person(int id, String firstName, String lastName, String email) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
+    private int faculty_id;//id
+    private String course;//firstName
+    private String course_id;//lastName
+    //private String email;
+    public Person(int faculty_id, String course, String course_id) {
+        this.faculty_id = faculty_id;
+        this.course = course;
+        this.course_id = course_id;
     }
     
-    public int getId() {
-        return id;
+    public int getFacultyId() {
+        return faculty_id;
     }
     
-    public void setId(int id) {
-        this.id = id;
+    public void setFacultyId(int id) {
+        this.faculty_id = faculty_id;
     }
     
-    public String getFirstName() {
-        return firstName;
+    public String getCourse() {
+        return course;
     }
     
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setCourse(String course) {
+        this.course = course;
     }
     
-    public String getLastName() {
-        return lastName;
+    public String getCourseId() {
+        return course_id;
     }
     
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setCourseId(String course_id) {
+        this.course_id = course_id;
     }
     
-    public String getEmail() {
-        return email;
-    }
-    
-    public void setEmail(String email) {
-        this.email = email;
-    }
 }
