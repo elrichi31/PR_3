@@ -35,9 +35,9 @@ public class View {
         tableFacultyView.setEditable(false);
         tableCourseView.setEditable(false);
     
-        TableColumn<Course, Integer> facultyIdColumn = new TableColumn<Course, Integer>("Course ID");
+        TableColumn<Course, Integer> facultyIdColumn = new TableColumn<Course, Integer>("Faculty ID");
         TableColumn<Course, String> courseColumn = new TableColumn<Course, String>("Course");
-        TableColumn<Course, Integer> courseIdColumn = new TableColumn<Course, Integer>("Faculty ID");
+        TableColumn<Course, Integer> courseIdColumn = new TableColumn<Course, Integer>("Course ID");
 
         TableColumn<Faculty, Integer> facultyIdColumn2 = new TableColumn<Faculty, Integer>("Faculty ID");
         TableColumn<Faculty, String> facultyNameColumn = new TableColumn<Faculty, String>("Faculty Name");
