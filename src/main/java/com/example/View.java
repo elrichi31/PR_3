@@ -1,126 +1,147 @@
 package com.example;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 public class View {
-    private TableView<Person> tableView;
-    private TextField faculty_idField;//idField
-    private TextField courseField;//firstNameField
-    private TextField course_idField;//lastNameField
-    //private TextField emailField;
+    private TableView<Course> tableCourseView;
+    private TextField facultyIdField;
+    private TextField courseField;
+    private TextField courseIdField;
+
+    private TableView<Faculty> tableFacultyView;
+    private TextField facultyIdField2;
+    private TextField facultyField;
+    private TextField officeField;
+
     public Controller controller = new Controller();
+
     public BorderPane createView (){
-        tableView = new TableView<Person>();
 
-        final ObservableList<Person> data = FXCollections.observableArrayList(
-            new Person(1,"Jacob", "Smith"),
-            new Person(2,"Isabella", "Johnson"),
-            new Person(3,"Ethan", "Williams"),
-            new Person(4,"Emma", "Jones"),
-            new Person(5,"Michael", "Brown")
-        );
-        //tableView.setItems(getPeople());
-        tableView.setEditable(false);
-    
-        //TableColumn<Person, Integer> idColumn = new TableColumn<Person, Integer>("ID");
-        TableColumn<Person, Integer> faculty_idColumn = new TableColumn<Person, Integer>("faculty_id");
-        //idColumn.setCellValueFactory(cellData );
-    
-        //TableColumn<Person, String> firstNameColumn = new TableColumn<Person, String>("First Name");
-        TableColumn<Person, String> courseColumn = new TableColumn<Person, String>("course");
-        //firstNameColumn.setCellValueFactory(cellData -> cellData.getValue().firstNameProperty());
-    
-        //TableColumn<Person, String> lastNameColumn = new TableColumn<>("Last Name");
-        TableColumn<Person, String> course_idColumn = new TableColumn<>("course_id");
-        //lastNameColumn.setCellValueFactory(cellData -> cellData.getValue().lastNameProperty());
-    
-        //TableColumn<Person, String> emailColumn = new TableColumn<>("Email");
-        //emailColumn.setCellValueFactory(cellData -> cellData.getValue().emailProperty());
+        tableCourseView = new TableView<Course>();
+        tableFacultyView = new TableView<Faculty>();
 
-        //idColumn.setMinWidth(20);
-        //idColumn.setCellValueFactory(
-        //        new PropertyValueFactory<Person, Integer>("id"));
-        faculty_idColumn.setMinWidth(20);
-        faculty_ididColumn.setCellValueFactory(
-                new PropertyValueFactory<Person, Integer>("faculty_id"));
-        
-        //firstNameColumn.setMinWidth(100);
-        //firstNameColumn.setCellValueFactory(
-        //        new PropertyValueFactory<Person, String>("firstName"));
-        courseColumn.setMinWidth(100);
+        final ObservableList<Course> dataCourse = controller.getCourses();
+        final ObservableList<Faculty> dataFaculty = controller.getFaculties();
+
+        tableFacultyView.setEditable(false);
+        tableCourseView.setEditable(false);
+    
+        TableColumn<Course, Integer> facultyIdColumn = new TableColumn<Course, Integer>("Course ID");
+        TableColumn<Course, String> courseColumn = new TableColumn<Course, String>("Course");
+        TableColumn<Course, Integer> courseIdColumn = new TableColumn<Course, Integer>("Faculty ID");
+
+        TableColumn<Faculty, Integer> facultyIdColumn2 = new TableColumn<Faculty, Integer>("Faculty ID");
+        TableColumn<Faculty, String> facultyNameColumn = new TableColumn<Faculty, String>("Faculty Name");
+        TableColumn<Faculty, String> officeColumn = new TableColumn<Faculty, String>("Office");
+
+    
+        facultyIdColumn.setMinWidth(25);
+        facultyIdColumn.setCellValueFactory(
+                new PropertyValueFactory<Course, Integer>("facultyId"));
+        courseColumn.setMinWidth(150);
         courseColumn.setCellValueFactory(
-                new PropertyValueFactory<Person, String>("course"));
- 
-        //lastNameColumn.setMinWidth(100);
-        //lastNameColumn.setCellValueFactory(
-        //        new PropertyValueFactory<Person, String>("lastName"));
-        course_idColumn.setMinWidth(100);
-        course_idColumn.setCellValueFactory(
-                new PropertyValueFactory<Person, String>("course_id"));
- 
- 
-        //emailColumn.setMinWidth(250);
-        //emailColumn.setCellValueFactory(
-        //        new PropertyValueFactory<Person, String>("email"));
+                new PropertyValueFactory<Course, String>("course"));
+        courseIdColumn.setMinWidth(100);
+        courseIdColumn.setCellValueFactory(
+                new PropertyValueFactory<Course, Integer>("courseId"));
 
-        tableView.setItems(data);
-        //tableView.getColumns().addAll(idColumn, firstNameColumn, lastNameColumn, emailColumn);
-        tableView.getColumns().addAll(faculty_idColumn, courseColumn, course_idColumn);
+        // Faculty
+        facultyIdColumn2.setMinWidth(25);
+        facultyIdColumn2.setCellValueFactory(
+               new PropertyValueFactory<Faculty, Integer>("facultyId"));
+        facultyNameColumn.setMinWidth(150);
+        facultyNameColumn.setCellValueFactory(
+                new PropertyValueFactory<Faculty, String>("facultyName"));
+        officeColumn.setMinWidth(25);
+        officeColumn.setCellValueFactory(
+                new PropertyValueFactory<Faculty, String>("office"));
+ 
+ 
+        tableCourseView.setItems(dataCourse);
+        tableCourseView.getColumns().addAll(courseIdColumn, courseColumn, facultyIdColumn);
 
-        //Label idLabel = new Label("ID:");
-        //idField = new TextField();
-        Label faculty_idLabel = new Label("faculty_id:");
-        faculty_idField = new TextField();
+        tableFacultyView.setItems(dataFaculty);
+        tableFacultyView.getColumns().addAll(facultyIdColumn2, facultyNameColumn, officeColumn);
 
-        //Label firstNameLabel = new Label("First Name:");
-        //firstNameField = new TextField();
-        Label courseLabel = new Label("course:");
+        facultyIdField = new TextField();
+        facultyIdField.setPromptText("Faculty Id");
+    
         courseField = new TextField();
+        courseField.setPromptText("Course");
 
-        //Label lastNameLabel = new Label("Last Name:");
-        //lastNameField = new TextField();
-        Label course_idLabel = new Label("course_id:");
-        course_idField = new TextField();
-
-        //Label emailLabel = new Label("Email:");
-        //emailField = new TextField();
+        courseIdField = new TextField();
+        courseIdField.setPromptText("Course Id");
 
 
-        Button addButton = new Button("Add");
-        addButton.setOnAction(e -> {
-            //ObservableList<Person> newData = controller.addPerson(idField ,firstNameField, lastNameField, emailField, data);
-            ObservableList<Person> newData = controller.addPerson(faculty_idField ,courseField, course_Field, data);
-            tableView.setItems(newData);
+
+        facultyIdField2 = new TextField();
+        facultyIdField2.setPromptText("Faculty Id");
+
+        facultyField = new TextField();
+        facultyField.setPromptText("Faculty");
+
+        officeField = new TextField();
+        officeField.setPromptText("Office");
+
+
+
+
+        Button addCurseButton = new Button("Add");
+        addCurseButton.setOnAction(e -> {
+            ObservableList<Course> newData = controller.addPerson(facultyIdField ,courseField, courseIdField, dataCourse);
+            tableCourseView.setItems(newData);
         });
 
-        Button updateButton = new Button("Update");
-        updateButton.setOnAction(e -> {
-            //ObservableList<Person> newData =  controller.updatePerson(idField, firstNameField, lastNameField, emailField, data);
-            ObservableList<Person> newData =  controller.updatePerson(faculty_idField, courseField, course_idField, data);
-            tableView.setItems(newData);
-            tableView.refresh();
+        Button updateCurseButton = new Button("Update");
+        updateCurseButton.setOnAction(e -> {
+            ObservableList<Course> newData =  controller.updatePerson(facultyIdField, courseField, courseIdField, dataCourse);
+            tableCourseView.setItems(newData);
+            tableCourseView.refresh();
         });
 
-        Button deleteButton = new Button("Delete");
+        Button deleteCourseButton = new Button("Delete");
+        deleteCourseButton.setOnAction(e -> {
+            controller.getFaculties();
+        });
         
 
-        Button clearButton = new Button("Clear");
-            clearButton.setOnAction(e -> {
-            //idField.clear();
-            //firstNameField.clear();
-            //lastNameField.clear();
-            //emailField.clear();
-            faculty_idField.clear();
+        Button clearCourseButton = new Button("Clear");
+        clearCourseButton.setOnAction(e -> {
+            facultyIdField.clear();
             courseField.clear();
-            course_idField.clear();
+            courseIdField.clear();
+        });
+
+        Button addFacultyButton = new Button("Add");
+        addCurseButton.setOnAction(e -> {
+            ObservableList<Course> newData = controller.addPerson(facultyIdField ,courseField, courseIdField, dataCourse);
+            tableCourseView.setItems(newData);
+        });
+
+        Button updateFacultyButton = new Button("Update");
+        updateCurseButton.setOnAction(e -> {
+            ObservableList<Course> newData =  controller.updatePerson(facultyIdField, courseField, courseIdField, dataCourse);
+            tableCourseView.setItems(newData);
+            tableCourseView.refresh();
+        });
+
+        Button deleteFacultyButton = new Button("Delete");
+        
+
+        Button clearFacultyButton = new Button("Clear");
+        clearCourseButton.setOnAction(e -> {
+            facultyIdField.clear();
+            courseField.clear();
+            courseIdField.clear();
         });
 
 
@@ -129,30 +150,49 @@ public class View {
         inputGridPane.setHgap(10);
         inputGridPane.setVgap(10);
         inputGridPane.setPadding(new Insets(10, 10, 10, 10));
-        inputGridPane.add(faculty_idLabel, 0, 0);//idLabel
-        inputGridPane.add(faculty_idField, 1, 0);//idField
-        inputGridPane.add(courseLabel, 0, 1);//firstNameLabel
-        inputGridPane.add(courseField, 1, 1);//firstNameField
-        inputGridPane.add(course_idLabel, 0, 2);//lastNameLabel
-        inputGridPane.add(course_idField, 1, 2);//lastNameField
-        //inputGridPane.add(emailLabel, 0, 3);
-        //inputGridPane.add(emailField, 1, 3);
+        inputGridPane.add(facultyIdField, 0, 0);
+        inputGridPane.add(courseField, 0, 1);
+        inputGridPane.add(courseIdField, 0, 2);
+
+
+        GridPane inputGridPane2 = new GridPane();
+        inputGridPane2.setHgap(10);
+        inputGridPane2.setVgap(10);
+        inputGridPane2.setPadding(new Insets(10, 10, 10, 10));
+        inputGridPane2.add(facultyIdField2, 0, 0);
+        inputGridPane2.add(facultyField, 0, 1);
+        inputGridPane2.add(officeField, 0, 2);
 
         // Crear el panel de botones
         GridPane buttonGridPane = new GridPane();
         buttonGridPane.setHgap(10);
         buttonGridPane.setVgap(10);
         buttonGridPane.setPadding(new Insets(10, 10, 10, 10));
-        buttonGridPane.add(addButton, 0, 0);
-        buttonGridPane.add(updateButton, 1, 0);
-        buttonGridPane.add(deleteButton, 2, 0);
-        buttonGridPane.add(clearButton, 3, 0);
+        buttonGridPane.add(addCurseButton, 0, 0);
+        buttonGridPane.add(updateCurseButton, 1, 0);
+        buttonGridPane.add(deleteCourseButton, 2, 0);
+        buttonGridPane.add(clearCourseButton, 3, 0);
+
+        GridPane buttonGridPane2 = new GridPane();
+        buttonGridPane2.setHgap(10);
+        buttonGridPane2.setVgap(10);
+        buttonGridPane2.setPadding(new Insets(10, 10, 10, 10));
+        buttonGridPane2.add(addFacultyButton, 0, 0);
+        buttonGridPane2.add(updateFacultyButton, 1, 0);
+        buttonGridPane2.add(deleteFacultyButton, 2, 0);
+        buttonGridPane2.add(clearFacultyButton, 3, 0);
 
         // Crear el panel principal
+        VBox vBoxCourse = new VBox(10);
+        VBox vBoxFaculty = new VBox(10);
+
+        HBox hBox = new HBox(20); 
+        hBox.setAlignment(Pos.CENTER);
+        vBoxCourse.getChildren().addAll(tableCourseView,inputGridPane, buttonGridPane);
+        vBoxFaculty.getChildren().addAll(tableFacultyView, inputGridPane2, buttonGridPane2);
+        hBox.getChildren().addAll(vBoxFaculty, vBoxCourse);
         BorderPane mainPane = new BorderPane();
-        mainPane.setCenter(tableView);
-        mainPane.setBottom(inputGridPane);
-        mainPane.setRight(buttonGridPane);
+        mainPane.setCenter(hBox);
         return mainPane;
     }
 }
