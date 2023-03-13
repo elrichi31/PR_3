@@ -1,4 +1,4 @@
-package com.example;
+//package com.example;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -70,7 +70,7 @@ public class Controller {
         return result;
     }
 
-    public ObservableList<Course> addPerson(TextField faculty_id, TextField courseField, TextField course_idField, 
+    public ObservableList<Course> addCourse(TextField faculty_id, TextField courseField, TextField course_idField, 
     ObservableList<Course> data) {
         data.add(new Course(Integer.parseInt(faculty_id.getText()), courseField.getText(), Integer.parseInt(course_idField.getText())));
         return data;
@@ -95,7 +95,7 @@ public class Controller {
     // }
     }
 
-    public ObservableList<Course> updatePerson(TextField faculty_id, TextField courseField, TextField course_idField, 
+    public ObservableList<Course> updateCourse(TextField faculty_id, TextField courseField, TextField course_idField, 
     ObservableList<Course> data){
         data.forEach(e -> {
             if(e.getFacultyId() == Integer.parseInt(faculty_id.getText())){
@@ -110,8 +110,55 @@ public class Controller {
         return data;
     }
 
-    public ObservableList<Course> deletePerson(TextField faculty_id, TextField courseField, TextField course_idField, 
+    public ObservableList<Course> deleteCourse(TextField faculty_id, TextField courseField, TextField course_idField, 
     ObservableList<Course> data){
+        return data;
+    }
+
+    //for Faculties
+
+    public ObservableList<Faculty> addFaculty(TextField faculty_id, TextField facultyName, TextField office, 
+    ObservableList<Faculty> data) {
+        data.add(new Faculty(Integer.parseInt(faculty_id.getText()), facultyName.getText(), office.getText()));
+        return data;
+        // Insertar un nuevo registro en la tabla
+    //     try {
+    //         int faculty_id = Integer.parseInt(faculty_idField.getText());
+    //         String firstName = firstNameField.getText();
+    //         String lastName = lastNameField.getText();
+    //         String email = emailField.getText();
+    
+    //         insert.setInt(1, faculty_id);
+    //         insert.setString(2, firstName);
+    //         insert.setString(3, lastName);
+    //         insert.setString(4, email);
+    //         insert.executeUpdate();
+    
+    //         clearFields();
+    //         tableView.setItems(getPeople());
+    //     } catch (SQLException ex) {
+    //         ex.printStackTrace();
+    //     }
+    // }
+    }
+
+    public ObservableList<Faculty> updateFaculty(TextField faculty_id, TextField facultyName, TextField office, 
+    ObservableList<Faculty> data){
+        data.forEach(e -> {
+            if(e.getFacultyId() == Integer.parseInt(faculty_id.getText())){
+                System.out.println(e.getFacultyName());
+                e.setFacultyName(facultyName.getText());
+                e.setOffice(office.getText());
+                //e.setEmail(emailField.getText());
+                System.out.println(e.getFacultyName() + " " + e.getOffice());
+            }
+
+        });
+        return data;
+    }
+
+    public ObservableList<Faculty> deleteFaculty(TextField faculty_id, TextField facultyName, TextField office, 
+    ObservableList<Faculty> data){
         return data;
     }
 }
