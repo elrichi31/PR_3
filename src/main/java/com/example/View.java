@@ -1,4 +1,4 @@
-//package com.example;
+package com.example;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -67,7 +67,7 @@ public class View {
  
  
         tableCourseView.setItems(dataCourse);
-        tableCourseView.getColumns().addAll(courseIdColumn, courseColumn, facultyIdColumn);
+        tableCourseView.getColumns().addAll(facultyIdColumn, courseColumn, courseIdColumn);
 
         tableFacultyView.setItems(dataFaculty);
         tableFacultyView.getColumns().addAll(facultyIdColumn2, facultyNameColumn, officeColumn);
@@ -94,25 +94,26 @@ public class View {
 
 
 
-
+        // Course button controllers
         Button addCurseButton = new Button("Add");
         addCurseButton.setOnAction(e -> {
-            ObservableList<Course> newDataC = controller.addCourse(facultyIdField ,courseField, courseIdField, dataCourse);
-            tableCourseView.setItems(newDataC);
+            controller.addCourse(facultyIdField ,courseField, courseIdField);
+            tableCourseView.setItems(controller.getCourses());
         });
 
         Button updateCurseButton = new Button("Update");
         updateCurseButton.setOnAction(e -> {
-            ObservableList<Course> newDataC1 =  controller.updateCourse(facultyIdField, courseField, courseIdField, dataCourse);
-            tableCourseView.setItems(newDataC1);
+            controller.updateCourse(facultyIdField, courseField, courseIdField);
+            tableCourseView.setItems(controller.getCourses());
             tableCourseView.refresh();
         });
 
         Button deleteCourseButton = new Button("Delete");
         deleteCourseButton.setOnAction(e -> {
-            controller.getFaculties();
+            controller.deleteCourse(courseIdField);
+            tableCourseView.setItems(controller.getCourses());
+            tableCourseView.refresh();
         });
-        
 
         Button clearCourseButton = new Button("Clear");
         clearCourseButton.setOnAction(e -> {
@@ -121,21 +122,26 @@ public class View {
             courseIdField.clear();
         });
 
+        // Faculty button controller
         Button addFacultyButton = new Button("Add");
         addFacultyButton.setOnAction(e -> {
-            ObservableList<Faculty> newDataF = controller.addFaculty(facultyIdField2,facultyField, officeField, dataFaculty);
-            tableFacultyView.setItems(newDataF);
+            controller.addFaculty(facultyIdField2,facultyField, officeField);
+            tableFacultyView.setItems(controller.getFaculties());
         });
 
         Button updateFacultyButton = new Button("Update");
         updateFacultyButton.setOnAction(e -> {
-            ObservableList<Faculty> newDataF1 =  controller.updateFaculty(facultyIdField2,facultyField, officeField, dataFaculty);
-            tableFacultyView.setItems(newDataF1);
+            controller.updateFaculty(facultyIdField2,facultyField, officeField);
+            tableFacultyView.setItems(controller.getFaculties());
             tableFacultyView.refresh();
         });
 
         Button deleteFacultyButton = new Button("Delete");
-        
+        deleteFacultyButton.setOnAction(e -> {
+            controller.deleteFaculty(facultyIdField2);
+            tableFacultyView.setItems(controller.getFaculties());
+            tableFacultyView.refresh();
+        });
 
         Button clearFacultyButton = new Button("Clear");
         clearFacultyButton.setOnAction(e -> {

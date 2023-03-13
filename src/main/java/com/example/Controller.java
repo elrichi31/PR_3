@@ -1,8 +1,4 @@
-//package com.example;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+package com.example;
 import java.sql.*;
 
 import javafx.collections.FXCollections;
@@ -57,7 +53,7 @@ public class Controller {
                 String courseName = rs.getString("course_name");
                 int facultyId = rs.getInt("faculty_id");
 
-                Course course = new Course(courseId, courseName, facultyId);
+                Course course = new Course(facultyId, courseName, courseId);
                 result.add(course);
 
             }
@@ -70,95 +66,122 @@ public class Controller {
         return result;
     }
 
-    public ObservableList<Course> addCourse(TextField faculty_id, TextField courseField, TextField course_idField, 
-    ObservableList<Course> data) {
-        data.add(new Course(Integer.parseInt(faculty_id.getText()), courseField.getText(), Integer.parseInt(course_idField.getText())));
-        return data;
-        // Insertar un nuevo registro en la tabla
-    //     try {
-    //         int faculty_id = Integer.parseInt(faculty_idField.getText());
-    //         String firstName = firstNameField.getText();
-    //         String lastName = lastNameField.getText();
-    //         String email = emailField.getText();
-    
-    //         insert.setInt(1, faculty_id);
-    //         insert.setString(2, firstName);
-    //         insert.setString(3, lastName);
-    //         insert.setString(4, email);
-    //         insert.executeUpdate();
-    
-    //         clearFields();
-    //         tableView.setItems(getPeople());
-    //     } catch (SQLException ex) {
-    //         ex.printStackTrace();
-    //     }
-    // }
+    public void addCourse(TextField faculty_id, TextField courseField, TextField course_idField) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try{
+            conn = DriverManager.getConnection(DB_URL);
+            String sql = "INSERT INTO Course (course_id, course_name, faculty_id) VALUES (?, ?, ?)";
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, Integer.parseInt(course_idField.getText()));
+            stmt.setString(2, courseField.getText());
+            stmt.setInt(3, Integer.parseInt(faculty_id.getText()));
+            stmt.executeUpdate();
+            System.out.println("El curso ha sido agregado exitosamente.");
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
     }
 
-    public ObservableList<Course> updateCourse(TextField faculty_id, TextField courseField, TextField course_idField, 
-    ObservableList<Course> data){
-        data.forEach(e -> {
-            if(e.getFacultyId() == Integer.parseInt(faculty_id.getText())){
-                System.out.println(e.getCourse());
-                e.setCourse(courseField.getText());
-                e.setCourseId(Integer.parseInt(course_idField.getText()));
-                //e.setEmail(emailField.getText());
-                System.out.println(e.getCourse() + " " + e.getCourseId());
+    public void updateCourse(TextField faculty_id, TextField courseField, TextField course_idField){
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try {
+            conn = DriverManager.getConnection(DB_URL);
+            String sql = "UPDATE Course SET course_name = ?, faculty_id = ? WHERE course_id = ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, courseField.getText());
+            stmt.setInt(2, Integer.parseInt(faculty_id.getText()));
+            stmt.setInt(3, Integer.parseInt(course_idField.getText()));
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected > 0) {
+              System.out.println("Se actualizaron " + rowsAffected + " filas.");
+            } else {
+              System.out.println("No se actualizaron filas.");
             }
-
-        });
-        return data;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
     }
 
-    public ObservableList<Course> deleteCourse(TextField faculty_id, TextField courseField, TextField course_idField, 
-    ObservableList<Course> data){
-        return data;
+    public void deleteCourse(TextField course_idField){
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try {
+            conn = DriverManager.getConnection(DB_URL);
+            String sql = "DELETE FROM Course WHERE course_id = ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, Integer.parseInt(course_idField.getText()));
+            stmt.executeUpdate();
+            System.out.println("Curso " + course_idField.getText() + " eliminado" );
+            stmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     //for Faculties
 
-    public ObservableList<Faculty> addFaculty(TextField faculty_id, TextField facultyName, TextField office, 
-    ObservableList<Faculty> data) {
-        data.add(new Faculty(Integer.parseInt(faculty_id.getText()), facultyName.getText(), office.getText()));
-        return data;
-        // Insertar un nuevo registro en la tabla
-    //     try {
-    //         int faculty_id = Integer.parseInt(faculty_idField.getText());
-    //         String firstName = firstNameField.getText();
-    //         String lastName = lastNameField.getText();
-    //         String email = emailField.getText();
-    
-    //         insert.setInt(1, faculty_id);
-    //         insert.setString(2, firstName);
-    //         insert.setString(3, lastName);
-    //         insert.setString(4, email);
-    //         insert.executeUpdate();
-    
-    //         clearFields();
-    //         tableView.setItems(getPeople());
-    //     } catch (SQLException ex) {
-    //         ex.printStackTrace();
-    //     }
-    // }
+    public void addFaculty(TextField faculty_id, TextField facultyName, TextField office) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try{
+            conn = DriverManager.getConnection(DB_URL);
+            String sql = "INSERT INTO Faculty (faculty_id, faculty_name, office) VALUES (?, ?, ?)";
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, Integer.parseInt(faculty_id.getText()));
+            stmt.setString(2, facultyName.getText());
+            stmt.setString(3, office.getText());
+            stmt.executeUpdate();
+            System.out.println("La facultad ha sido agregado exitosamente.");
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
     }
 
-    public ObservableList<Faculty> updateFaculty(TextField faculty_id, TextField facultyName, TextField office, 
-    ObservableList<Faculty> data){
-        data.forEach(e -> {
-            if(e.getFacultyId() == Integer.parseInt(faculty_id.getText())){
-                System.out.println(e.getFacultyName());
-                e.setFacultyName(facultyName.getText());
-                e.setOffice(office.getText());
-                //e.setEmail(emailField.getText());
-                System.out.println(e.getFacultyName() + " " + e.getOffice());
+    public void updateFaculty(TextField faculty_id, TextField facultyName, TextField office){
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try {
+            conn = DriverManager.getConnection(DB_URL);
+            String sql = "UPDATE Faculty SET faculty_name = ?, office = ? WHERE faculty_id = ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, facultyName.getText());
+            stmt.setString(2, office.getText());
+            stmt.setInt(3, Integer.parseInt(faculty_id.getText()));
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected > 0) {
+              System.out.println("Se actualizaron " + rowsAffected + " filas.");
+            } else {
+              System.out.println("No se actualizaron filas.");
             }
-
-        });
-        return data;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    public ObservableList<Faculty> deleteFaculty(TextField faculty_id, TextField facultyName, TextField office, 
-    ObservableList<Faculty> data){
-        return data;
+    public void deleteFaculty(TextField faculty_id){
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try {
+            conn = DriverManager.getConnection(DB_URL);
+
+            // Paso 3: Preparar la consulta
+            String sql = "DELETE FROM Faculty WHERE faculty_id = ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, Integer.parseInt(faculty_id.getText()));
+    
+            // Paso 4: Ejecutar la consulta
+            int rowsDeleted = stmt.executeUpdate();
+            if (rowsDeleted == 0) {
+                System.out.println("No se encontró una fila con faculty_id = " + faculty_id.getText());
+            } else {
+                System.out.println("Se borró la fila con faculty_id = " + faculty_id.getText());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
