@@ -32,13 +32,13 @@ public class DatabaseInitializer {
       stmt.executeUpdate(sql);
 
       //Agregar datos de prueba a la tabla "Faculty"
-      sql = "INSERT INTO Faculty (faculty_id, faculty_name, office) VALUES (1, 'Mathematics', 'Building A, Room 101')";
+      sql = "INSERT INTO Faculty (faculty_id, faculty_name, office) VALUES (1, 'Mathematics', 'M211')";
       stmt.executeUpdate(sql);
-      sql = "INSERT INTO Faculty (faculty_id, faculty_name, office) VALUES (2, 'Physics', 'Building B, Room 202')";
+      sql = "INSERT INTO Faculty (faculty_id, faculty_name, office) VALUES (2, 'Physics', 'G123')";
       stmt.executeUpdate(sql);
-      sql = "INSERT INTO Faculty (faculty_id, faculty_name, office) VALUES (3, 'Chemstry', 'Building C, Room 326')";
+      sql = "INSERT INTO Faculty (faculty_id, faculty_name, office) VALUES (3, 'Chemstry', 'H121')";
       stmt.executeUpdate(sql);
-      sql = "INSERT INTO Faculty (faculty_id, faculty_name, office) VALUES (4, 'Biology', 'Building F, Room 116')";
+      sql = "INSERT INTO Faculty (faculty_id, faculty_name, office) VALUES (4, 'Biology', 'E100')";
       stmt.executeUpdate(sql);
 
 

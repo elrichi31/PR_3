@@ -4,11 +4,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -27,7 +29,17 @@ public class View {
     ObservableList<Label> facultyResultConsult = FXCollections.observableArrayList();
     ObservableList<Label> courseResultConsult = FXCollections.observableArrayList();
 
+    public void clearFacultyFields(){
+        facultyIdField2.clear();
+        facultyField.clear();
+        officeField.clear();
+    }
 
+    public void clearCourseFields(){
+        facultyIdField.clear();
+        courseField.clear();
+        courseIdField.clear();
+    }
 
     public Controller controller = new Controller();
 
@@ -111,22 +123,46 @@ public class View {
         // Course button controllers
         Button addCurseButton = new Button("Add");
         addCurseButton.setOnAction(e -> {
-            controller.addCourse(facultyIdField ,courseField, courseIdField, dataCourse);
-            tableCourseView.setItems(controller.getCourses());
+            if(facultyIdField.getText().isEmpty() || courseField.getText().isEmpty() || courseIdField.getText().isEmpty()){
+                Alert a = new Alert(AlertType.WARNING);
+                a.setTitle("Warning");
+                a.setHeaderText("Empty field");
+                a.showAndWait();
+            } else {
+                controller.addCourse(facultyIdField ,courseField, courseIdField, dataCourse, dataFaculty);
+                tableCourseView.setItems(controller.getCourses());
+                clearCourseFields();
+            }
         });
 
         Button updateCurseButton = new Button("Update");
         updateCurseButton.setOnAction(e -> {
-            controller.updateCourse(facultyIdField, courseField, courseIdField);
-            tableCourseView.setItems(controller.getCourses());
-            tableCourseView.refresh();
+            if(facultyIdField.getText().isEmpty() || courseField.getText().isEmpty() || courseIdField.getText().isEmpty()){
+                Alert a = new Alert(AlertType.WARNING);
+                a.setTitle("Warning");
+                a.setHeaderText("Empty field");
+                a.showAndWait();
+            } else {
+                controller.updateCourse(facultyIdField, courseField, courseIdField);
+                tableCourseView.setItems(controller.getCourses());
+                tableCourseView.refresh();
+                clearCourseFields();
+            }
         });
 
         Button deleteCourseButton = new Button("Delete");
         deleteCourseButton.setOnAction(e -> {
-            controller.deleteCourse(courseIdField);
-            tableCourseView.setItems(controller.getCourses());
-            tableCourseView.refresh();
+            if(facultyIdField.getText().isEmpty() || courseField.getText().isEmpty() || courseIdField.getText().isEmpty()){
+                Alert a = new Alert(AlertType.WARNING);
+                a.setTitle("Warning");
+                a.setHeaderText("Empty field");
+                a.showAndWait();
+            } else {
+                controller.deleteCourse(courseIdField);
+                tableCourseView.setItems(controller.getCourses());
+                tableCourseView.refresh();
+                clearCourseFields();
+            }
         });
 
         Button clearCourseButton = new Button("Clear");
@@ -139,22 +175,48 @@ public class View {
         // Faculty button controller
         Button addFacultyButton = new Button("Add");
         addFacultyButton.setOnAction(e -> {
-            controller.addFaculty(facultyIdField2,facultyField, officeField);
-            tableFacultyView.setItems(controller.getFaculties());
+            if(facultyIdField2.getText().isEmpty() || facultyField.getText().isEmpty() || officeField.getText().isEmpty()){
+                Alert a = new Alert(AlertType.WARNING);
+                a.setTitle("Warning");
+                a.setHeaderText("Empty field");
+                a.showAndWait();
+            } else {
+                controller.addFaculty(facultyIdField2,facultyField, officeField, dataFaculty);
+                tableFacultyView.setItems(controller.getFaculties());
+                clearFacultyFields();
+            }
+            
         });
 
         Button updateFacultyButton = new Button("Update");
         updateFacultyButton.setOnAction(e -> {
-            controller.updateFaculty(facultyIdField2,facultyField, officeField);
-            tableFacultyView.setItems(controller.getFaculties());
-            tableFacultyView.refresh();
+            if(facultyIdField2.getText().isEmpty() || facultyField.getText().isEmpty() || officeField.getText().isEmpty()){
+                Alert a = new Alert(AlertType.WARNING);
+                a.setTitle("Warning");
+                a.setHeaderText("Empty field");
+                a.showAndWait();
+            } else {
+                controller.updateFaculty(facultyIdField2,facultyField, officeField);
+                tableFacultyView.setItems(controller.getFaculties());
+                tableFacultyView.refresh();
+                clearFacultyFields();
+            }
         });
 
         Button deleteFacultyButton = new Button("Delete");
         deleteFacultyButton.setOnAction(e -> {
-            controller.deleteFaculty(facultyIdField2);
-            tableFacultyView.setItems(controller.getFaculties());
-            tableFacultyView.refresh();
+            if(facultyIdField2.getText().isEmpty() || facultyField.getText().isEmpty() || officeField.getText().isEmpty()){
+                Alert a = new Alert(AlertType.WARNING);
+                a.setTitle("Warning");
+                a.setHeaderText("Empty field");
+                a.showAndWait();
+            } else {
+                controller.deleteFaculty(facultyIdField2);
+                tableFacultyView.setItems(controller.getFaculties());
+                tableCourseView.setItems(controller.getCourses());
+                tableFacultyView.refresh();
+                clearFacultyFields();
+            }
         });
 
         Button clearFacultyButton = new Button("Clear");
@@ -164,6 +226,7 @@ public class View {
             officeField.clear();
         });
 
+        
 
         // Crear el panel de entrada de datos
         GridPane gridPaneFaculty = new GridPane();

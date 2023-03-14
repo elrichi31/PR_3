@@ -2,8 +2,10 @@ package com.example;
 import java.sql.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.VBox;
 
 public class Controller {
@@ -67,14 +69,20 @@ public class Controller {
     }
 
     boolean courseExists;
-    public void addCourse(TextField faculty_id, TextField courseField, TextField course_idField, ObservableList<Course> data) {
-        data.forEach(e -> {
-            System.out.println(e.getCourse() + " " +  e.getCourseId() + " " + e.getFacultyId());
+    boolean facultyCurseExists;
+    public void addCourse(TextField faculty_id, TextField courseField, TextField course_idField, ObservableList<Course> dataCourse, ObservableList<Faculty> dataFaculty) {
+        dataCourse.forEach(e -> {
             if (e.getCourseId() == Integer.parseInt(course_idField.getText())){
                 courseExists = true;
             }
         });
-        if(!courseExists){
+        dataFaculty.forEach(e -> {
+            if(e.getFacultyId() == Integer.parseInt(faculty_id.getText())){
+                facultyCurseExists = true;
+               
+            }
+        });
+        if(!courseExists && facultyCurseExists){
             Connection conn = null;
             PreparedStatement stmt = null;
             try{
@@ -90,7 +98,10 @@ public class Controller {
                 e.printStackTrace();
             }
         } else {
-            System.out.println("Curso duplicado, ingresar otro curso para continuar");
+            Alert a = new Alert(AlertType.WARNING);
+            a.setTitle("Warning");
+            a.setHeaderText("Curso duplicado o sin facultad, ingresar otro curso para continuar");
+            a.showAndWait();
         }
     }
 
