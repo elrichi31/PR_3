@@ -1,4 +1,4 @@
-package com.example;
+//package com.example;
 
 public class Course {
     private int facultyId;
