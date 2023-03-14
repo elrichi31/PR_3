@@ -52,6 +52,10 @@ public class DatabaseInitializer {
       stmt.executeUpdate(sql);
       sql = "INSERT INTO Course (course_id, course_name, faculty_id) VALUES (202, 'Mechanics II', 2)";
       stmt.executeUpdate(sql);
+      sql = "INSERT INTO Course (course_id, course_name, faculty_id) VALUES (212, 'Biology I', 4)";
+      stmt.executeUpdate(sql);
+      sql = "INSERT INTO Course (course_id, course_name, faculty_id) VALUES (412, 'Chemstry II', 3)";
+      stmt.executeUpdate(sql);
       
       //Cerrar las conexiones
       stmt.close();

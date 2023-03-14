@@ -6,7 +6,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.layout.VBox;
 
 public class Controller {
 
@@ -71,6 +70,7 @@ public class Controller {
     boolean courseExists;
     boolean facultyCurseExists;
     public void addCourse(TextField faculty_id, TextField courseField, TextField course_idField, ObservableList<Course> dataCourse, ObservableList<Faculty> dataFaculty) {
+        
         dataCourse.forEach(e -> {
             if (e.getCourseId() == Integer.parseInt(course_idField.getText())){
                 courseExists = true;
@@ -85,6 +85,8 @@ public class Controller {
         if(!courseExists && facultyCurseExists){
             Connection conn = null;
             PreparedStatement stmt = null;
+            courseExists = false;
+            facultyCurseExists = false;
             try{
                 conn = DriverManager.getConnection(DB_URL);
                 String sql = "INSERT INTO Course (course_id, course_name, faculty_id) VALUES (?, ?, ?)";
@@ -94,10 +96,13 @@ public class Controller {
                 stmt.setInt(3, Integer.parseInt(faculty_id.getText()));
                 stmt.executeUpdate();
                 System.out.println("El curso ha sido agregado exitosamente.");
+               
             } catch(SQLException e){
                 e.printStackTrace();
             }
         } else {
+            courseExists = false;
+            facultyCurseExists = false;
             Alert a = new Alert(AlertType.WARNING);
             a.setTitle("Warning");
             a.setHeaderText("Curso duplicado o sin facultad, ingresar otro curso para continuar");
@@ -165,11 +170,16 @@ public class Controller {
                 stmt.setString(3, office.getText());
                 stmt.executeUpdate();
                 System.out.println("La facultad ha sido agregado exitosamente.");
+                facultyExists = false;
             } catch(SQLException e){
                 e.printStackTrace();
             }
         } else {
-            System.out.println("Profesor duplicado, ingresar otro profesor para continuar");
+            facultyExists = false;
+            Alert a = new Alert(AlertType.WARNING);
+            a.setTitle("Warning");
+            a.setHeaderText("Profesor duplicado, ingresar otro profesor para continuar");
+            a.showAndWait();
         }
     }
 
@@ -200,14 +210,14 @@ public class Controller {
         try {
             conn = DriverManager.getConnection(DB_URL);
 
-            // Paso 3: Preparar la consulta
+            //Preparar la consulta
             String sql = "DELETE FROM Course WHERE faculty_id = ?";
             
             stmt = conn.prepareStatement(sql);
             stmt.setInt(1, Integer.parseInt(faculty_id.getText()));
 
     
-            // Paso 4: Ejecutar la consulta
+            // Ejecutar la consulta
             int rowsDeleted = stmt.executeUpdate();
             if (rowsDeleted == 0) {
                     Connection con = DriverManager.getConnection(DB_URL);
@@ -245,7 +255,6 @@ public class Controller {
             if (facultyIDResult.next()) {
                 facultyID = facultyIDResult.getInt("faculty_id");
             } else {
-                //System.out.println("Facultad no encontrada");
                 results.add(new Label("Facultad no encontrada"));
                 return results;
             }
@@ -263,7 +272,6 @@ public class Controller {
                 int facultyIDres = coursesResult.getInt("faculty_id");
                 String courseName = coursesResult.getString("course_name");
                 results.add(new Label("Course ID: " + courseID + " Course Name: " + courseName + " Faculty Id: " + facultyIDres));
-                //System.out.println(courseID + "\t" + "\t" + courseName + "\t" + facultyIDres);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -286,7 +294,6 @@ public class Controller {
                 String course_name = rs.getString("course_name");
                 int faculty_id = rs.getInt("faculty_id");
                 results.add(new Label("Course ID: " + course_id + ", Course Name: " + course_name + ", Faculty ID: " + faculty_id));
-                //System.out.println("Course ID: " + course_id + ", Course Name: " + course_name + ", Faculty ID: " + faculty_id);
             }
         } catch (SQLException e) {
             e.printStackTrace();
