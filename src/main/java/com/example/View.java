@@ -139,7 +139,7 @@ public class View {
         // Faculty button controller
         Button addFacultyButton = new Button("Add");
         addFacultyButton.setOnAction(e -> {
-            controller.addFaculty(facultyIdField2,facultyField, officeField);
+            controller.addFaculty(facultyIdField2,facultyField, officeField, dataFaculty);
             tableFacultyView.setItems(controller.getFaculties());
         });
 
