@@ -1,5 +1,6 @@
 package com.example;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -23,6 +24,10 @@ public class View {
     private TextField facultyIdField2;
     private TextField facultyField;
     private TextField officeField;
+    ObservableList<Label> facultyResultConsult = FXCollections.observableArrayList();
+    ObservableList<Label> courseResultConsult = FXCollections.observableArrayList();
+
+
 
     public Controller controller = new Controller();
 
@@ -174,6 +179,18 @@ public class View {
         gridPaneFaculty.add(facultyConsult, 0, 0);
         gridPaneFaculty.add(execute, 1, 0);
         gridPaneFaculty.add(clearFacultyConsult, 2, 0);
+        VBox resultConsultFaculty = new VBox(10);
+        execute.setOnAction(e -> {
+            facultyResultConsult = controller.getCoursesByFaculty(facultyConsult.getText());
+            facultyResultConsult.forEach(e1 -> {
+                resultConsultFaculty.getChildren().add(e1);
+            });
+        });
+        clearFacultyConsult.setOnAction(e ->{
+            facultyConsult.setText("");
+            resultConsultFaculty.getChildren().clear();
+        });
+
 
         GridPane gridPaneCourse = new GridPane();
         gridPaneCourse.setHgap(10);
@@ -185,7 +202,19 @@ public class View {
         gridPaneCourse.add(courseConsult, 0, 0);
         gridPaneCourse.add(execute2, 1, 0);
         gridPaneCourse.add(clearCourseConsult, 2, 0);
+        VBox resultConsultCourse = new VBox(10);
 
+
+        execute2.setOnAction(e -> {
+            courseResultConsult = controller.searchCoursesByKeyWord(courseConsult.getText());
+            courseResultConsult.forEach(e1 -> {
+                resultConsultCourse.getChildren().addAll(e1);
+            });
+        });
+        clearCourseConsult.setOnAction(e ->{
+            courseConsult.setText("");
+            resultConsultCourse.getChildren().clear();
+        });
 
         GridPane inputGridPane = new GridPane();
         inputGridPane.setHgap(5);
@@ -243,8 +272,8 @@ public class View {
         vBoxFaculty.getChildren().addAll(tableFacultyView, inputGridPane2, buttonGridPane2);
         hBox.getChildren().addAll(vBoxFaculty, vBoxCourse);
 
-        vBoxFacultyConsult.getChildren().addAll(gridPaneFaculty);
-        vBoxCourseConsult.getChildren().addAll(gridPaneCourse);
+        vBoxFacultyConsult.getChildren().addAll(gridPaneFaculty, resultConsultFaculty);
+        vBoxCourseConsult.getChildren().addAll(gridPaneCourse, resultConsultCourse);
         hBoxConsult.getChildren().addAll(vBoxFacultyConsult, vBoxCourseConsult);
 
         vBoxTotal.getChildren().addAll(hBox, title, hBoxConsult);

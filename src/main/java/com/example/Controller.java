@@ -2,7 +2,9 @@ package com.example;
 import java.sql.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 
 public class Controller {
 
@@ -192,5 +194,70 @@ public class Controller {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public ObservableList<Label> getCoursesByFaculty(String facultyName){
+        Connection conn = null;
+        Statement stmt = null;
+        ObservableList<Label> results = FXCollections.observableArrayList();
+
+        try {
+            conn = DriverManager.getConnection(DB_URL);
+            stmt = conn.createStatement();
+    
+            // Obtener el ID de la facultad
+            String facultyIDQuery = "SELECT faculty_id FROM Faculty WHERE faculty_name = '" + facultyName + "'";
+            ResultSet facultyIDResult = stmt.executeQuery(facultyIDQuery);
+            int facultyID = 0;
+            if (facultyIDResult.next()) {
+                facultyID = facultyIDResult.getInt("faculty_id");
+            } else {
+                //System.out.println("Facultad no encontrada");
+                results.add(new Label("Facultad no encontrada"));
+                return results;
+            }
+    
+            // Obtener los cursos de la facultad
+            String coursesQuery = "SELECT course_id, course_name, faculty_id FROM Course WHERE faculty_id = " + facultyID;
+            ResultSet coursesResult = stmt.executeQuery(coursesQuery);
+    
+            // Imprimir los resultados
+            System.out.println("Cursos de la facultad " + facultyName + ":");
+            System.out.println("Course ID" + "\t" + "Course name" + "\t" + "Faculty ID");
+            results.add(new Label("Cursos de la facultad " + facultyName + ":"));
+            while (coursesResult.next()) {
+                int courseID = coursesResult.getInt("course_id");
+                int facultyIDres = coursesResult.getInt("faculty_id");
+                String courseName = coursesResult.getString("course_name");
+                results.add(new Label("Course ID: " + courseID + " Course Name: " + courseName + " Faculty Id: " + facultyIDres));
+                //System.out.println(courseID + "\t" + "\t" + courseName + "\t" + facultyIDres);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return results;
+    }
+    public ObservableList<Label> searchCoursesByKeyWord(String keyword){
+        Connection conn = null;
+        Statement stmt = null;
+        ObservableList<Label> results = FXCollections.observableArrayList();
+
+        try {
+            conn = DriverManager.getConnection(DB_URL);
+            stmt = conn.createStatement();
+            String sql = "SELECT * FROM Course WHERE course_name LIKE '%" + keyword + "%'";
+            ResultSet rs = stmt.executeQuery(sql);
+            results.add(new Label("Resultados para " + keyword));
+            while (rs.next()) {
+                int course_id = rs.getInt("course_id");
+                String course_name = rs.getString("course_name");
+                int faculty_id = rs.getInt("faculty_id");
+                results.add(new Label("Course ID: " + course_id + ", Course Name: " + course_name + ", Faculty ID: " + faculty_id));
+                //System.out.println("Course ID: " + course_id + ", Course Name: " + course_name + ", Faculty ID: " + faculty_id);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return results;
     }
 }
