@@ -90,7 +90,7 @@ public class Controller {
                 e.printStackTrace();
             }
         } else {
-            System.out.println("Curso con id repetido ingresa otro id para continuar");
+            System.out.println("Curso duplicado, ingresar otro curso para continuar");
         }
     }
 
@@ -133,22 +133,32 @@ public class Controller {
         }
     }
 
-    //for Faculties
+    boolean facultyExists;
+    public void addFaculty(TextField faculty_id, TextField facultyName, TextField office, ObservableList<Faculty> data) {
+        data.forEach(e -> {
+            System.out.println(e.getFacultyId() + " " +  e.getFacultyName() + " " + e.getOffice());
+            if (e.getFacultyId() == Integer.parseInt(faculty_id.getText())){
+                facultyExists = true;
+            }
+        });
 
-    public void addFaculty(TextField faculty_id, TextField facultyName, TextField office) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        try{
-            conn = DriverManager.getConnection(DB_URL);
-            String sql = "INSERT INTO Faculty (faculty_id, faculty_name, office) VALUES (?, ?, ?)";
-            stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, Integer.parseInt(faculty_id.getText()));
-            stmt.setString(2, facultyName.getText());
-            stmt.setString(3, office.getText());
-            stmt.executeUpdate();
-            System.out.println("La facultad ha sido agregado exitosamente.");
-        } catch(SQLException e){
-            e.printStackTrace();
+        if(!facultyExists){
+            Connection conn = null;
+            PreparedStatement stmt = null;
+            try{
+                conn = DriverManager.getConnection(DB_URL);
+                String sql = "INSERT INTO Faculty (faculty_id, faculty_name, office) VALUES (?, ?, ?)";
+                stmt = conn.prepareStatement(sql);
+                stmt.setInt(1, Integer.parseInt(faculty_id.getText()));
+                stmt.setString(2, facultyName.getText());
+                stmt.setString(3, office.getText());
+                stmt.executeUpdate();
+                System.out.println("La facultad ha sido agregado exitosamente.");
+            } catch(SQLException e){
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Profesor duplicado, ingresar otro profesor para continuar");
         }
     }
 
@@ -180,16 +190,28 @@ public class Controller {
             conn = DriverManager.getConnection(DB_URL);
 
             // Paso 3: Preparar la consulta
-            String sql = "DELETE FROM Faculty WHERE faculty_id = ?";
+            String sql = "DELETE FROM Course WHERE faculty_id = ?";
+            
             stmt = conn.prepareStatement(sql);
             stmt.setInt(1, Integer.parseInt(faculty_id.getText()));
+
     
             // Paso 4: Ejecutar la consulta
             int rowsDeleted = stmt.executeUpdate();
             if (rowsDeleted == 0) {
-                System.out.println("No se encontró una fila con faculty_id = " + faculty_id.getText());
+                    Connection con = DriverManager.getConnection(DB_URL);
+                    String sql2 = "DELETE FROM Faculty WHERE faculty_id ="+faculty_id.getText()+" ";
+
+                    PreparedStatement st = con.prepareStatement(sql2);
+                    st.executeUpdate();
+                System.out.println("Cero cursos borrados. Profesor borrado con faculty_id = " + faculty_id.getText());
             } else {
-                System.out.println("Se borró la fila con faculty_id = " + faculty_id.getText());
+                    Connection con = DriverManager.getConnection(DB_URL);
+                    String sql2 = "DELETE FROM Faculty WHERE faculty_id ="+faculty_id.getText()+" ";
+
+                    PreparedStatement st = con.prepareStatement(sql2);
+                    st.executeUpdate();
+                System.out.println("Profesor con faculty_id = " + faculty_id.getText() +" borrado y todos sus cursos borrados");
             }
         } catch (SQLException e) {
             e.printStackTrace();
