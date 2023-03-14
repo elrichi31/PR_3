@@ -1,8 +1,10 @@
 package com.example;
+
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -43,25 +45,24 @@ public class View {
         TableColumn<Faculty, String> facultyNameColumn = new TableColumn<Faculty, String>("Faculty Name");
         TableColumn<Faculty, String> officeColumn = new TableColumn<Faculty, String>("Office");
 
-    
-        facultyIdColumn.setMinWidth(25);
+        facultyIdColumn.setMinWidth(110);
         facultyIdColumn.setCellValueFactory(
                 new PropertyValueFactory<Course, Integer>("facultyId"));
         courseColumn.setMinWidth(150);
         courseColumn.setCellValueFactory(
                 new PropertyValueFactory<Course, String>("course"));
-        courseIdColumn.setMinWidth(100);
+        courseIdColumn.setMinWidth(110);
         courseIdColumn.setCellValueFactory(
                 new PropertyValueFactory<Course, Integer>("courseId"));
 
         // Faculty
-        facultyIdColumn2.setMinWidth(25);
+        facultyIdColumn2.setMinWidth(110);
         facultyIdColumn2.setCellValueFactory(
                new PropertyValueFactory<Faculty, Integer>("facultyId"));
         facultyNameColumn.setMinWidth(150);
         facultyNameColumn.setCellValueFactory(
                 new PropertyValueFactory<Faculty, String>("facultyName"));
-        officeColumn.setMinWidth(25);
+        officeColumn.setMinWidth(110);
         officeColumn.setCellValueFactory(
                 new PropertyValueFactory<Faculty, String>("office"));
  
@@ -72,32 +73,40 @@ public class View {
         tableFacultyView.setItems(dataFaculty);
         tableFacultyView.getColumns().addAll(facultyIdColumn2, facultyNameColumn, officeColumn);
 
+        
+        
         facultyIdField = new TextField();
+        facultyIdField.setPrefWidth(110);
         facultyIdField.setPromptText("Faculty Id");
     
         courseField = new TextField();
+        courseField.setPrefWidth(150);
         courseField.setPromptText("Course");
 
         courseIdField = new TextField();
+        courseIdField.setPrefWidth(110);
         courseIdField.setPromptText("Course Id");
 
 
 
         facultyIdField2 = new TextField();
         facultyIdField2.setPromptText("Faculty Id");
+        facultyIdField2.setPrefWidth(110);
 
         facultyField = new TextField();
         facultyField.setPromptText("Faculty");
+        facultyField.setPrefWidth(150);
 
         officeField = new TextField();
         officeField.setPromptText("Office");
+        officeField.setPrefWidth(110);
 
 
 
         // Course button controllers
         Button addCurseButton = new Button("Add");
         addCurseButton.setOnAction(e -> {
-            controller.addCourse(facultyIdField ,courseField, courseIdField);
+            controller.addCourse(facultyIdField ,courseField, courseIdField, dataCourse);
             tableCourseView.setItems(controller.getCourses());
         });
 
@@ -152,53 +161,95 @@ public class View {
 
 
         // Crear el panel de entrada de datos
+        GridPane gridPaneFaculty = new GridPane();
+        gridPaneFaculty.setHgap(10);
+        gridPaneFaculty.setVgap(10);
+        TextField facultyConsult = new TextField();
+        facultyConsult.setPromptText("Ingrese una facultad");
+        Button execute = new Button("Execute");
+        Button clearFacultyConsult = new Button("Clear");
+        Button clearCourseConsult = new Button("Clear");
+
+        gridPaneFaculty.setPadding(new Insets(10, 10, 10, 10));
+        gridPaneFaculty.add(facultyConsult, 0, 0);
+        gridPaneFaculty.add(execute, 1, 0);
+        gridPaneFaculty.add(clearFacultyConsult, 2, 0);
+
+        GridPane gridPaneCourse = new GridPane();
+        gridPaneCourse.setHgap(10);
+        gridPaneCourse.setVgap(10);
+        TextField courseConsult = new TextField();
+        courseConsult.setPromptText("Palabras comunes");
+        Button execute2 = new Button("Execute");
+        gridPaneCourse.setPadding(new Insets(10, 10, 10, 10));
+        gridPaneCourse.add(courseConsult, 0, 0);
+        gridPaneCourse.add(execute2, 1, 0);
+        gridPaneCourse.add(clearCourseConsult, 2, 0);
+
+
         GridPane inputGridPane = new GridPane();
-        inputGridPane.setHgap(10);
-        inputGridPane.setVgap(10);
-        inputGridPane.setPadding(new Insets(10, 10, 10, 10));
+        inputGridPane.setHgap(5);
+        inputGridPane.setVgap(5);
+        inputGridPane.setPadding(new Insets(4, 0, 4, 0));
         inputGridPane.add(facultyIdField, 0, 0);
-        inputGridPane.add(courseField, 0, 1);
-        inputGridPane.add(courseIdField, 0, 2);
+        inputGridPane.add(courseField, 1, 0);
+        inputGridPane.add(courseIdField, 2, 0);
 
 
         GridPane inputGridPane2 = new GridPane();
-        inputGridPane2.setHgap(10);
-        inputGridPane2.setVgap(10);
-        inputGridPane2.setPadding(new Insets(10, 10, 10, 10));
+        inputGridPane2.setHgap(5);
+        inputGridPane2.setVgap(5);
+        inputGridPane2.setPadding(new Insets(4, 0, 4, 0));
         inputGridPane2.add(facultyIdField2, 0, 0);
-        inputGridPane2.add(facultyField, 0, 1);
-        inputGridPane2.add(officeField, 0, 2);
+        inputGridPane2.add(facultyField, 1, 0);
+        inputGridPane2.add(officeField, 2, 0);
 
         // Crear el panel de botones
         GridPane buttonGridPane = new GridPane();
-        buttonGridPane.setHgap(10);
-        buttonGridPane.setVgap(10);
-        buttonGridPane.setPadding(new Insets(10, 10, 10, 10));
+        buttonGridPane.setHgap(5);
+        buttonGridPane.setVgap(5);
+        //buttonGridPane.setPadding(new Insets(5, 5, 5, 5));
         buttonGridPane.add(addCurseButton, 0, 0);
         buttonGridPane.add(updateCurseButton, 1, 0);
         buttonGridPane.add(deleteCourseButton, 2, 0);
         buttonGridPane.add(clearCourseButton, 3, 0);
 
         GridPane buttonGridPane2 = new GridPane();
-        buttonGridPane2.setHgap(10);
-        buttonGridPane2.setVgap(10);
-        buttonGridPane2.setPadding(new Insets(10, 10, 10, 10));
+        buttonGridPane2.setHgap(5);
+        buttonGridPane2.setVgap(5);
+        //buttonGridPane2.setPadding(new Insets(10, 10, 10, 10));
         buttonGridPane2.add(addFacultyButton, 0, 0);
         buttonGridPane2.add(updateFacultyButton, 1, 0);
         buttonGridPane2.add(deleteFacultyButton, 2, 0);
         buttonGridPane2.add(clearFacultyButton, 3, 0);
 
         // Crear el panel principal
-        VBox vBoxCourse = new VBox(10);
-        VBox vBoxFaculty = new VBox(10);
+        VBox vBoxCourse = new VBox(5);
+        VBox vBoxFaculty = new VBox(5);
+        VBox vBoxTotal = new VBox(10);
 
+        VBox vBoxCourseConsult = new VBox(10);
+        VBox vBoxFacultyConsult = new VBox(10);
+
+        Label title = new Label("Consultas");
+
+        title.setAlignment(Pos.CENTER);
+        HBox hBoxConsult = new HBox(10);
         HBox hBox = new HBox(20); 
         hBox.setAlignment(Pos.CENTER);
+        vBoxTotal.setAlignment(Pos.CENTER);
+        hBoxConsult.setAlignment(Pos.CENTER);
         vBoxCourse.getChildren().addAll(tableCourseView,inputGridPane, buttonGridPane);
         vBoxFaculty.getChildren().addAll(tableFacultyView, inputGridPane2, buttonGridPane2);
         hBox.getChildren().addAll(vBoxFaculty, vBoxCourse);
+
+        vBoxFacultyConsult.getChildren().addAll(gridPaneFaculty);
+        vBoxCourseConsult.getChildren().addAll(gridPaneCourse);
+        hBoxConsult.getChildren().addAll(vBoxFacultyConsult, vBoxCourseConsult);
+
+        vBoxTotal.getChildren().addAll(hBox, title, hBoxConsult);
         BorderPane mainPane = new BorderPane();
-        mainPane.setCenter(hBox);
+        mainPane.setCenter(vBoxTotal);
         return mainPane;
     }
 }

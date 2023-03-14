@@ -1,6 +1,5 @@
 package com.example;
 import java.sql.*;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TextField;
@@ -55,7 +54,6 @@ public class Controller {
 
                 Course course = new Course(facultyId, courseName, courseId);
                 result.add(course);
-
             }
         
         } catch (SQLException e){
@@ -66,20 +64,31 @@ public class Controller {
         return result;
     }
 
-    public void addCourse(TextField faculty_id, TextField courseField, TextField course_idField) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        try{
-            conn = DriverManager.getConnection(DB_URL);
-            String sql = "INSERT INTO Course (course_id, course_name, faculty_id) VALUES (?, ?, ?)";
-            stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, Integer.parseInt(course_idField.getText()));
-            stmt.setString(2, courseField.getText());
-            stmt.setInt(3, Integer.parseInt(faculty_id.getText()));
-            stmt.executeUpdate();
-            System.out.println("El curso ha sido agregado exitosamente.");
-        } catch(SQLException e){
-            e.printStackTrace();
+    boolean courseExists;
+    public void addCourse(TextField faculty_id, TextField courseField, TextField course_idField, ObservableList<Course> data) {
+        data.forEach(e -> {
+            System.out.println(e.getCourse() + " " +  e.getCourseId() + " " + e.getFacultyId());
+            if (e.getCourseId() == Integer.parseInt(course_idField.getText())){
+                courseExists = true;
+            }
+        });
+        if(!courseExists){
+            Connection conn = null;
+            PreparedStatement stmt = null;
+            try{
+                conn = DriverManager.getConnection(DB_URL);
+                String sql = "INSERT INTO Course (course_id, course_name, faculty_id) VALUES (?, ?, ?)";
+                stmt = conn.prepareStatement(sql);
+                stmt.setInt(1, Integer.parseInt(course_idField.getText()));
+                stmt.setString(2, courseField.getText());
+                stmt.setInt(3, Integer.parseInt(faculty_id.getText()));
+                stmt.executeUpdate();
+                System.out.println("El curso ha sido agregado exitosamente.");
+            } catch(SQLException e){
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Curso con id repetido ingresa otro id para continuar");
         }
     }
 
