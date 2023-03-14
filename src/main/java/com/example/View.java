@@ -28,6 +28,8 @@ public class View {
     private TextField officeField;
     ObservableList<Label> facultyResultConsult = FXCollections.observableArrayList();
     ObservableList<Label> courseResultConsult = FXCollections.observableArrayList();
+    ObservableList<Course> dataCourse = FXCollections.observableArrayList();
+    ObservableList<Faculty> dataFaculty = FXCollections.observableArrayList();
 
     public void clearFacultyFields(){
         facultyIdField2.clear();
@@ -45,11 +47,11 @@ public class View {
 
     public BorderPane createView (){
 
+        dataCourse = controller.getCourses();
+        dataFaculty = controller.getFaculties();
+
         tableCourseView = new TableView<Course>();
         tableFacultyView = new TableView<Faculty>();
-
-        final ObservableList<Course> dataCourse = controller.getCourses();
-        final ObservableList<Faculty> dataFaculty = controller.getFaculties();
 
         tableFacultyView.setEditable(false);
         tableCourseView.setEditable(false);
@@ -131,6 +133,7 @@ public class View {
             } else {
                 controller.addCourse(facultyIdField ,courseField, courseIdField, dataCourse, dataFaculty);
                 tableCourseView.setItems(controller.getCourses());
+                dataCourse = controller.getCourses();
                 clearCourseFields();
             }
         });
@@ -146,6 +149,7 @@ public class View {
                 controller.updateCourse(facultyIdField, courseField, courseIdField);
                 tableCourseView.setItems(controller.getCourses());
                 tableCourseView.refresh();
+                dataCourse = controller.getCourses();
                 clearCourseFields();
             }
         });
@@ -161,6 +165,7 @@ public class View {
                 controller.deleteCourse(courseIdField);
                 tableCourseView.setItems(controller.getCourses());
                 tableCourseView.refresh();
+                dataCourse = controller.getCourses();
                 clearCourseFields();
             }
         });
@@ -183,6 +188,7 @@ public class View {
             } else {
                 controller.addFaculty(facultyIdField2,facultyField, officeField, dataFaculty);
                 tableFacultyView.setItems(controller.getFaculties());
+                dataFaculty = controller.getFaculties();
                 clearFacultyFields();
             }
             
@@ -199,6 +205,7 @@ public class View {
                 controller.updateFaculty(facultyIdField2,facultyField, officeField);
                 tableFacultyView.setItems(controller.getFaculties());
                 tableFacultyView.refresh();
+                dataFaculty = controller.getFaculties();
                 clearFacultyFields();
             }
         });
@@ -215,6 +222,7 @@ public class View {
                 tableFacultyView.setItems(controller.getFaculties());
                 tableCourseView.setItems(controller.getCourses());
                 tableFacultyView.refresh();
+                dataFaculty = controller.getFaculties();
                 clearFacultyFields();
             }
         });
